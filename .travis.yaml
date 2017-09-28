@@ -1,0 +1,18 @@
+language: go
+
+go:
+  - 1.9
+
+install:
+  - sudo apt-get install -y --force-yes upx
+  - go get -u github.com/golang/dep/cmd/dep
+  - dep ensure
+
+script:
+  - mkdir /home/travis/.k8s-deploy
+  - go test --cover $(go list ./... | grep -v /vendor/)
+  - go build -o /tmp/k8s-deploy
+  - /tmp/k8s-deploy -h
+
+after_success:
+  - test -n "$TRAVIS_TAG" && curl -sL https://git.io/goreleaser | bash
