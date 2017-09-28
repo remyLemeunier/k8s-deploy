@@ -1,0 +1,5 @@
+.idea
+.idea/*
+vendor/*
+dist/*
+k8s-deploy
