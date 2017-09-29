@@ -8,18 +8,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var deployManCmd = &cobra.Command{
-	Use:   "deploy-man",
+var diffCmd = &cobra.Command{
+	Use:   "diff",
 	Short: "",
 	Long:  ``,
-	RunE:  deployMan,
+	RunE:  diff,
 }
 
 func init() {
-	RootCmd.AddCommand(deployManCmd)
+	RootCmd.AddCommand(diffCmd)
 }
 
-func deployMan(cmd *cobra.Command, args []string) error {
+func diff(cmd *cobra.Command, args []string) error {
 	if len(args) != 1 {
 		return fmt.Errorf("Missing release manifest argument")
 	}
@@ -28,11 +28,7 @@ func deployMan(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	if err := release.Deploy(); err != nil {
-		return err
-	}
-
-	if err := release.PrintStatus(os.Stdout); err != nil {
+	if err := release.PrintDiff(os.Stdout); err != nil {
 		return err
 	}
 

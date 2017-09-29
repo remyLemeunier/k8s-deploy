@@ -110,7 +110,7 @@ func (r *Release) Deploy() error {
 			helm.ValueOverrides([]byte{}),
 		)
 		if err != nil {
-			return nil
+			return err
 		}
 		r.release = response.GetRelease()
 	} else {
