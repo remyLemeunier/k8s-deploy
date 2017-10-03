@@ -21,6 +21,18 @@ import (
 	"k8s.io/helm/pkg/timeconv"
 )
 
+type Releaser interface {
+	Deploy() error
+}
+
+type FakeRelease struct {
+	Release
+}
+
+func (r *FakeRelease) Deploy() error {
+	return nil
+}
+
 type Release struct {
 	name       string
 	chart      *chart.Chart
