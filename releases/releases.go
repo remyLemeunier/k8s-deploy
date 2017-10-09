@@ -25,6 +25,8 @@ import (
 
 type Releaser interface {
 	Deploy() error
+	Content() (*services.GetReleaseContentResponse, error)
+	Status() (*services.GetReleaseStatusResponse, error)
 }
 
 type FakeRelease struct {
