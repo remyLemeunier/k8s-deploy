@@ -52,6 +52,7 @@ func NewRelease(name string, cluster string, namespace string, chartPath string,
 
 	chart, err := chartutil.Load(chartPath)
 	if err != nil {
+		log.Debugf("Could no load chart : %q", chartPath)
 		return nil, err
 	}
 
