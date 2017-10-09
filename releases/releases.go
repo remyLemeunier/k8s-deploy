@@ -10,9 +10,11 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/apex/log"
+	"k8s.io/helm/pkg/proto/hapi/services"
+
 	"github.com/remyLemeunier/k8s-deploy/helmclient"
 	"github.com/sergi/go-diff/diffmatchpatch"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"k8s.io/helm/pkg/chartutil"
 	"k8s.io/helm/pkg/helm"
@@ -113,7 +115,7 @@ func (r *Release) isInstalled() bool {
 
 func (r *Release) Deploy() error {
 	if !r.isInstalled() {
-		log.Infof("Installing release %s", r.name)
+		log.Debugf("Installing release %s", r.name)
 		response, err := r.hapiClient.InstallReleaseFromChart(
 			r.chart,
 			r.namespace,
@@ -126,7 +128,7 @@ func (r *Release) Deploy() error {
 		}
 		r.release = response.GetRelease()
 	} else {
-		log.Infof("Updating release %s", r.name)
+		log.Debugf("Updating release %s", r.name)
 		response, err := r.hapiClient.UpdateReleaseFromChart(
 			r.name,
 			r.chart,
@@ -139,7 +141,7 @@ func (r *Release) Deploy() error {
 
 		r.release = response.GetRelease()
 	}
-	log.Infof("Deployed release %s", r.name)
+	log.Debugf("Deployed release %s", r.name)
 	return nil
 }
 
@@ -168,6 +170,14 @@ func (r *Release) PrintDiff(out io.Writer) error {
 	return nil
 }
 
+func (r *Release) Content() (*services.GetReleaseContentResponse, error) {
+	response, err := r.hapiClient.ReleaseContent(r.name)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (r *Release) PrintContent(out io.Writer) error {
 	response, err := r.hapiClient.ReleaseContent(r.name)
 	if err != nil {
@@ -176,7 +186,14 @@ func (r *Release) PrintContent(out io.Writer) error {
 
 	fmt.Fprintf(out, response.Release.Manifest)
 	return nil
+}
 
+func (r *Release) Status() (*services.GetReleaseStatusResponse, error) {
+	status, err := r.hapiClient.ReleaseStatus(r.name)
+	if err != nil {
+		return nil, errors.New(grpc.ErrorDesc(err))
+	}
+	return status, nil
 }
 
 // taken from helm's printstatus()
