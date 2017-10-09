@@ -1,0 +1,10 @@
+name: worker-payment-monitoring
+cluster: ~
+namespace: payment
+chart: ~
+  ../../../charts/worker-payment-monitoring
+values: 
+  - ./app.yaml
+  - ./symapse.yaml
+  - ../../../preprod/values.yaml
+set: ~
