@@ -14,7 +14,6 @@ var mockRelease Release = Release{
 	chart:     &chart.Chart{},
 	cluster:   "test",
 	namespace: "test",
-	overrides: []byte{},
 	hapiClient: &helm.FakeClient{
 		Rels: []*release.Release{
 			&release.Release{Name: "fake"},
