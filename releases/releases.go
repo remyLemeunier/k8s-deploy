@@ -39,14 +39,15 @@ func (r *FakeRelease) Deploy() error {
 }
 
 type Release struct {
-	name       string
-	chart      *chart.Chart
-	cluster    string
-	namespace  string
-	valueFiles []string
-	values     []string
-	hapiClient helm.Interface
-	release    *release.Release
+	name         string
+	chart        *chart.Chart
+	manifestPath string
+	cluster      string
+	namespace    string
+	valueFiles   []string
+	values       []string
+	hapiClient   helm.Interface
+	release      *release.Release
 }
 
 func NewRelease(name string, cluster string, namespace string, chartPath string,
@@ -81,11 +82,6 @@ func NewRelease(name string, cluster string, namespace string, chartPath string,
 }
 
 func NewReleaseFromManifest(manifestPath string) (*Release, error) {
-	cwd, err := os.Getwd()
-	if err != nil {
-		cwd = ""
-	}
-
 	if err := os.Chdir(path.Dir(manifestPath)); err != nil {
 		return nil, err
 	}
@@ -100,9 +96,6 @@ func NewReleaseFromManifest(manifestPath string) (*Release, error) {
 		return nil, err
 	}
 
-	if cwd != "" {
-		os.Chdir(cwd)
-	}
 	return release, nil
 }
 
