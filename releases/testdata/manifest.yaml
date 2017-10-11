@@ -1,10 +1,8 @@
 name: worker-payment-monitoring
 cluster: ~
 namespace: payment
-chart: ~
-  ../../../charts/worker-payment-monitoring
+chart: ./sleepy/
 values: 
-  - ./app.yaml
-  - ./symapse.yaml
-  - ../../../preprod/values.yaml
+  - ./values1.yaml
+  - ./values2.yaml
 set: ~

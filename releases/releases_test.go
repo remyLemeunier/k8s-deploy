@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/davecgh/go-spew/spew"
+
 	"k8s.io/helm/pkg/helm"
 	"k8s.io/helm/pkg/proto/hapi/chart"
 	"k8s.io/helm/pkg/proto/hapi/release"
@@ -23,9 +25,15 @@ var mockRelease Release = Release{
 	release: nil,
 }
 
-func TestNewRelease(t *testing.T) {}
+func TestNewRelease(t *testing.T) {
+}
 
-func TestNewReleaseFromManifest(t *testing.T) {}
+func TestNewReleaseFromManifest(t *testing.T) {
+	_, err := NewReleaseFromManifest("./testdata/manifest.yaml")
+	if err != nil {
+		t.Errorf("Unexpected err: %q", err)
+	}
+}
 
 func TestIsInstalled(t *testing.T) {
 	r := mockRelease
@@ -42,6 +50,19 @@ func TestIsInstalled(t *testing.T) {
 		t.Errorf("Unexpected value for isInstalled() : %q", installed)
 	}
 
+}
+
+func TestReleaseLoadValues(t *testing.T) {
+	r, err := NewReleaseFromManifest("./testdata/manifest.yaml")
+	if err != nil {
+		t.Errorf("Unexpected err: %q", err)
+	}
+	spew.Dump(r.valueFiles)
+	overrides, err := r.LoadValues()
+	if err != nil {
+		t.Errorf("Unexpected err: %q", err)
+	}
+	spew.Dump(string(overrides))
 }
 
 func TestDeploy(t *testing.T) {

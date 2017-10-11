@@ -81,21 +81,27 @@ func NewRelease(name string, cluster string, namespace string, chartPath string,
 	}, nil
 }
 
-func NewReleaseFromManifest(manifestPath string) (*Release, error) {
-	if err := os.Chdir(path.Dir(manifestPath)); err != nil {
-		return nil, err
+func normalizePath(basePath string, relativePath string) string {
+	if path.IsAbs(relativePath) {
+		return relativePath
 	}
+	return path.Join(basePath, relativePath)
+}
 
+func NewReleaseFromManifest(manifestPath string) (*Release, error) {
 	manifest, err := ReadManifestFromFile(manifestPath)
 	if err != nil {
 		return nil, err
 	}
+
+	manifest.Chart = normalizePath(path.Dir(manifestPath), manifest.Chart)
 
 	release, err := NewRelease(manifest.Name, manifest.Cluster, manifest.Namespace, manifest.Chart, manifest.ValueFiles, manifest.Values)
 	if err != nil {
 		return nil, err
 	}
 
+	release.manifestPath = manifestPath
 	return release, nil
 }
 
@@ -116,8 +122,26 @@ func (r *Release) AddValues(valueFiles []string, values []string) {
 	}
 }
 
-func (r *Release) Deploy() error {
+func (r *Release) LoadValues() ([]byte, error) {
+	if r.manifestPath != "" {
+		cwd, err := os.Getwd()
+		if err != nil {
+			cwd = ""
+		}
+		if err := os.Chdir(path.Dir(r.manifestPath)); err != nil {
+			return nil, err
+		}
+		defer os.Chdir(cwd)
+	}
 	overrides, err := loadValues(r.valueFiles, r.values)
+	if err != nil {
+		return nil, err
+	}
+	return overrides, nil
+}
+
+func (r *Release) Deploy() error {
+	overrides, err := r.LoadValues()
 	if err != nil {
 		return err
 	}
