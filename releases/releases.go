@@ -95,7 +95,7 @@ func NewReleaseFromManifest(manifestPath string) (*Release, error) {
 		return nil, err
 	}
 
-	release, err := NewRelease(manifest.Name, manifest.Cluster, manifest.Namespace, manifest.Chart, manifest.valueFiles, manifest.values)
+	release, err := NewRelease(manifest.Name, manifest.Cluster, manifest.Namespace, manifest.Chart, manifest.ValueFiles, manifest.Values)
 	if err != nil {
 		return nil, err
 	}
@@ -115,8 +115,12 @@ func (r *Release) isInstalled() bool {
 }
 
 func (r *Release) AddValues(valueFiles []string, values []string) {
-	r.valueFiles = append(r.valueFiles, valueFiles)
-	r.values = append(r.values, values)
+	for _, vf := range valueFiles {
+		r.valueFiles = append(r.valueFiles, vf)
+	}
+	for _, v := range values {
+		r.values = append(r.values, v)
+	}
 }
 
 func (r *Release) Deploy() error {
