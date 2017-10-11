@@ -27,7 +27,7 @@ type Releaser interface {
 	Deploy() error
 	Content() (*services.GetReleaseContentResponse, error)
 	Status() (*services.GetReleaseStatusResponse, error)
-	AddValues(valueFiles []string, values []string)
+	AddValues([]string, []string)
 }
 
 type FakeRelease struct {
