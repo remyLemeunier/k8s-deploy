@@ -5,4 +5,5 @@ chart: ./sleepy/
 values: 
   - ./values1.yaml
   - ./values2.yaml
+  - ./dir/values3.yaml
 set: ~

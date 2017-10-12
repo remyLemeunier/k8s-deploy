@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
-
 	"k8s.io/helm/pkg/helm"
 	"k8s.io/helm/pkg/proto/hapi/chart"
 	"k8s.io/helm/pkg/proto/hapi/release"
@@ -57,12 +55,15 @@ func TestReleaseLoadValues(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected err: %q", err)
 	}
-	spew.Dump(r.valueFiles)
+
 	overrides, err := r.LoadValues()
 	if err != nil {
 		t.Errorf("Unexpected err: %q", err)
 	}
-	spew.Dump(string(overrides))
+
+	if string(overrides) != "foo: bar\ntata: z\ntoto: a\n" {
+		t.Errorf("ovverides should look like 'foo: bar\ntata: z\ntoto: a\n' instead go %q", string(overrides))
+	}
 }
 
 func TestDeploy(t *testing.T) {
