@@ -1,1 +1,3 @@
-toto: a
+attributes:
+  values1.yaml:
+    values1: a
