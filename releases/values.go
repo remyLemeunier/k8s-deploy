@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/peterbourgon/mergemap"
+	"github.com/imdario/mergo"
 	yaml "gopkg.in/yaml.v2"
 	"k8s.io/helm/pkg/strvals"
 )
@@ -25,7 +25,8 @@ func loadValues(valueFiles []string, values []string) ([]byte, error) {
 		if err := yaml.Unmarshal(bytes, &currentMap); err != nil {
 			return []byte{}, fmt.Errorf("failed to parse %s : %s", filePath, err)
 		}
-		base = mergemap.Merge(base, currentMap)
+
+		mergo.Merge(&base, currentMap)
 	}
 
 	for _, value := range values {
