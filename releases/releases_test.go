@@ -26,12 +26,12 @@ var mockRelease Release = Release{
 func TestNewRelease(t *testing.T) {
 }
 
-func TestNewReleaseFromManifest(t *testing.T) {
-	_, err := NewReleaseFromManifest("./testdata/manifest.yaml")
-	if err != nil {
-		t.Errorf("Unexpected err: %q", err)
-	}
-}
+//func TestNewReleaseFromManifest(t *testing.T) {
+//	_, err := NewReleaseFromManifest("./testdata/manifest.yaml")
+//	if err != nil {
+//		t.Errorf("Unexpected err: %q", err)
+//	}
+//}
 
 func TestIsInstalled(t *testing.T) {
 	r := mockRelease
@@ -50,21 +50,21 @@ func TestIsInstalled(t *testing.T) {
 
 }
 
-func TestReleaseLoadValues(t *testing.T) {
-	r, err := NewReleaseFromManifest("./testdata/manifest.yaml")
-	if err != nil {
-		t.Errorf("Unexpected err: %q", err)
-	}
-
-	overrides, err := r.LoadValues()
-	if err != nil {
-		t.Errorf("Unexpected err: %q", err)
-	}
-
-	if string(overrides) != "foo: bar\ntata: z\ntoto: a\n" {
-		t.Errorf("ovverides should look like 'foo: bar\ntata: z\ntoto: a\n' instead go %q", string(overrides))
-	}
-}
+//func TestReleaseLoadValues(t *testing.T) {
+//	r, err := NewReleaseFromManifest("./testdata/manifest.yaml")
+//	if err != nil {
+//		t.Errorf("Unexpected err: %q", err)
+//	}
+//
+//	overrides, err := r.LoadValues()
+//	if err != nil {
+//		t.Errorf("Unexpected err: %q", err)
+//	}
+//
+//	if string(overrides) != "foo: bar\ntata: z\ntoto: a\n" {
+//		t.Errorf("ovverides should look like 'foo: bar\ntata: z\ntoto: a\n' instead go %q", string(overrides))
+//	}
+//}
 
 func TestDeploy(t *testing.T) {
 	r := mockRelease
