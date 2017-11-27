@@ -9,7 +9,7 @@ func TestLoadValues(t *testing.T) {
 		"./testdata/values1.yaml",
 		"./testdata/values2.yaml",
 	}
-	v, err := loadValues(valueFiles, []string{"a=value", "c=1"})
+	v, err := LoadValues(valueFiles, []string{"a=value", "c=1"})
 	if err != nil {
 		t.Errorf("Unexpected err: %q", err)
 	}

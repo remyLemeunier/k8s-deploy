@@ -11,7 +11,7 @@ import (
 
 // taken from helm's cmd/helm/install.go
 
-func loadValues(valueFiles []string, values []string) ([]byte, error) {
+func LoadValues(valueFiles []string, values []string) ([]byte, error) {
 	base := map[string]interface{}{}
 
 	for _, filePath := range valueFiles {

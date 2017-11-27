@@ -133,7 +133,7 @@ func (r *Release) LoadValues() ([]byte, error) {
 		}
 		defer os.Chdir(cwd)
 	}
-	overrides, err := loadValues(r.valueFiles, r.values)
+	overrides, err := LoadValues(r.valueFiles, r.values)
 	if err != nil {
 		return nil, err
 	}
